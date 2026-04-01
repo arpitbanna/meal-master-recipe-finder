@@ -1,16 +1,62 @@
-# React + Vite
+# 🍳 Meal Master – Recipe Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Demo:** [https://meal-master-recipe-finder-one.vercel.app/](https://meal-master-recipe-finder-one.vercel.app/)
 
-Currently, two official plugins are available:
+## 🔰 Project Description
+Meal Master is a web application that helps users search for recipes using a public API. Users can enter a meal name and get a list of recipes with images and basic details. They can also view full cooking instructions for each recipe.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎯 Objective
+The objective of this project is to demonstrate API integration using React and display real-time data on a webpage. It also focuses on dynamic content rendering, component-based state management, and responsive UI design.
 
-## React Compiler
+## 🌐 API Used
+This project uses TheMealDB API:
+https://www.themealdb.com/api.php
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Main endpoints used:
+- Search meals: `https://www.themealdb.com/api/json/v1/1/search.php?s=`
+- Lookup meal by ID: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=`
 
-## Expanding the ESLint configuration
+## ✨ Features Implemented
+- Search meals using API (`fetch`)
+- Display meal data dynamically using React hooks (`useState`)
+- Show meal image, name, and category
+- View full recipe instructions
+- Loading indicators while fetching data
+- Fully responsive layout for different screen sizes (mobile, tablet, desktop)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Technologies Used
+- React (Vite)
+- JSX / JavaScript (Fetch API)
+- CSS (Grid & Flexbox)
+
+## ▶️ How to Run the Project Locally
+1. Clone the repository:
+   ```bash
+   git clone <your-repo-link>
+   ```
+
+2. Open the project folder:
+   ```bash
+   cd meal-master-recipe-finder
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 📱 Responsiveness
+The layout is designed using responsive CSS Grid (`auto-fit`, `minmax`) and Flexbox containers, which automatically adjust and wrap elegantly for mobile, tablet, and desktop screens. 
+
+## 📅 Status
+Completed – API successfully integrated and application restructured natively into React.
+
+## 🔮 Future Improvements
+- Add filter and sort options
+- Add a shopping list or favorites feature
+- Expand UI design themes
