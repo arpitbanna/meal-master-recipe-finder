@@ -32,7 +32,7 @@ Main endpoints used:
 ## ▶️ How to Run the Project Locally
 1. Clone the repository:
    ```bash
-   git clone <your-repo-link>
+   git clone https://github.com/arpitbanna/meal-master-recipe-finder.git
    ```
 
 2. Open the project folder:
