@@ -1,30 +1,16 @@
-# Meal Master – Recipe Finder
+# React + Vite
 
-## Project Description
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Meal Master is a web application that helps users find recipes based on the ingredients they have. Users can search for meals, view recipe details, and explore different dishes easily.
+Currently, two official plugins are available:
 
-## Purpose of the Project
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-The main goal of this project is to demonstrate the use of JavaScript, API integration, and UI development. It also aims to solve a real-life problem of deciding what to cook with available ingredients.
+## React Compiler
 
-## API Used
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-This project uses TheMealDB API:
-https://www.themealdb.com/api.php
+## Expanding the ESLint configuration
 
-The API provides meal data including recipe names, images, ingredients, and instructions.
-
-## Planned Features
-
-* Search recipes by name or ingredient
-* Display recipes in a card layout
-* View detailed recipe information
-* Filter and sort recipes
-* Shopping list feature (combine ingredients from multiple recipes)
-
-## Technologies Used
-
-* HTML
-* CSS
-* JavaScript (Fetch API)
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
