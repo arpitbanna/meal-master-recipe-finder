@@ -67,15 +67,3 @@ meal-master/
 ```
 
 ---
-
-## 🌐 Deploying to Vercel
-This project is configured natively using Vite and is ready for 1-click CI/CD deployment on Vercel.
-
-1. Ensure all your terminal changes are committed to GitHub.
-2. Log into your [Vercel Account](https://vercel.com).
-3. Click **Add New** > **Project** and import this GitHub repository.
-4. Vercel will automatically detect `Vite`.
-5. Ensure the Build Command rests at `npm run build` and Output Directory at `dist`.
-6. Click **Deploy**. Your app will be live globally in under a minute!
-
----
