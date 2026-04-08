@@ -1,13 +1,63 @@
+/* -----------------------------
+   GLOBAL & BACKGROUNDS 
+------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
-  margin: 20px;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f4f8 0%, #cbd5e1 100%);
+  background-attachment: fixed;
+  color: #1e293b;
+  transition: background 0.4s ease, color 0.4s ease;
+  min-height: 100vh;
 }
 
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typography */
+h1 {
+  font-size: 3rem;
+  margin-bottom: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #4f46e5 0%, #c026d3 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+  drop-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+  color: #334155;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* -----------------------------
+   LAYOUT GRIDS & CONTAINERS 
+------------------------------ */
 #mealContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -19,98 +69,17 @@ body {
 
 #mealContainer.single-item .meal-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
 }
 
-img {
-  width: 100%;
-  max-width: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.recipe-view {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.recipe-view img {
-  max-width: 600px;
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  margin: 15px 0;
-}
-
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #f8f9fa;
-  font-weight: bold;
-  transition: all 0.2s;
-}
-
-button:hover {
-  background-color: #e2e6ea;
-}
-
-input {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  width: 100%;
-  max-width: 300px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-body.dark-mode {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-}
-
-body.dark-mode button {
-  background-color: #333;
-  color: #fff;
-  border-color: #555;
-}
-
-body.dark-mode button:hover {
-  background-color: #444;
-}
-
-body.dark-mode input, body.dark-mode select {
-  background-color: #333;
-  color: #fff;
-  border-color: #555;
-}
-
-body.dark-mode .meal-card {
-  border-color: #333;
-  background-color: #242424;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .meal-card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-}
-
-.top-bar {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 0;
-}
-
+/* -----------------------------
+   CONTROL PANEL (GLASSMORPHISM)
+------------------------------ */
 .controls-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 25px;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
 .filters-container {
@@ -119,80 +88,349 @@ body.dark-mode .meal-card:hover {
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05),
+              0 0 10px rgba(255, 255, 255, 0.2) inset;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+input, select, button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+input {
+  width: 100%;
+  max-width: 320px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+input:focus, select:focus {
+  border-color: #8b5cf6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
   cursor: pointer;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Native Control Buttons */
+button {
+  cursor: pointer;
+  background-color: #ffffff;
+  font-weight: 600;
+  color: #334155;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+button:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* -----------------------------
+   MEAL CARDS (PREMIUM SAAS)
+------------------------------ */
 .meal-card {
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 12px;
-  background-color: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .meal-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 1);
 }
 
+/* Image Hover Zoom */
 .meal-card img {
-  height: 200px;
+  height: 220px;
   width: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  transition: transform 0.4s ease;
 }
 
+.meal-card:hover img {
+  transform: scale(1.04);
+}
+
+.meal-card p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+/* -----------------------------
+   ACTION BUTTONS 
+------------------------------ */
 .action-buttons {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-top: auto;
-  padding-top: 10px;
 }
 
+.view-btn {
+  flex-grow: 1;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+.view-btn:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.6);
+  transform: translateY(-3px);
+}
+
+/* Favorite System Buttons */
 .fav-btn {
   background-color: transparent;
-  color: #888;
-  font-size: 1.1em;
+  color: #94a3b8;
+  border: 1px solid #cbd5e1;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 14px;
 }
 
 .fav-btn.active {
-  color: #ff9800;
-  border-color: #ff9800;
-  background-color: #fff3e0;
+  color: #d97706;
+  border-color: #fbbf24;
+  background: #fef3c7;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
 }
 
-body.dark-mode .fav-btn.active {
-  background-color: #332615;
-  color: #ffb74d;
-  border-color: #ffb74d;
+.fav-toggle-btn.active {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fbbf24;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
 }
 
+/* -----------------------------
+   RECIPE VIEW 
+------------------------------ */
+.recipe-view {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  text-align: left;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
 
+.recipe-view h2 {
+  font-size: 2.2rem;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #1e293b;
+}
+
+.recipe-view img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 16px;
+  margin: 0 auto 30px auto;
+  display: block;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-view p {
+  color: #475569;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.back-btn {
+  display: block;
+  margin: 40px auto 0;
+  min-width: 180px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+}
+
+.back-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* -----------------------------
+   TOP BAR & FOOTER 
+------------------------------ */
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dark-mode-toggle {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #475569;
+  border-radius: 12px;
+}
+
+.dark-mode-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
 
 .app-footer {
-  margin-top: 40px;
-  padding: 20px 10px;
+  margin-top: 80px;
+  padding: 30px 10px 20px;
   text-align: center;
-  font-size: 0.9em;
-  color: #666;
-  border-top: 1px solid #eaeaea;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* -----------------------------
+   DARK MODE OVERRIDES
+------------------------------ */
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
+}
+
+body.dark-mode h1 {
+  background: linear-gradient(135deg, #818cf8 0%, #e879f9 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+body.dark-mode h2, body.dark-mode h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .meal-card p, body.dark-mode .recipe-view p {
+  color: #94a3b8;
+}
+
+body.dark-mode .filters-container {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4),
+              0 0 10px rgba(255, 255, 255, 0.05) inset;
+}
+
+body.dark-mode input, body.dark-mode select, body.dark-mode button, body.dark-mode .back-btn {
+  background-color: rgba(30, 41, 59, 0.8);
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode input:focus, body.dark-mode select:focus {
+  border-color: #8b5cf6;
+  background-color: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25);
+}
+
+body.dark-mode button:hover, body.dark-mode .back-btn:hover {
+  background-color: #334155;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .dark-mode-toggle {
+  background-color: rgba(30, 41, 59, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+  background-color: #334155;
+}
+
+body.dark-mode .meal-card, body.dark-mode .recipe-view {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .meal-card:hover {
+  box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .view-btn {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 6px 15px -3px rgba(79, 70, 229, 0.5);
+}
+
+body.dark-mode .view-btn:hover {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.7);
+}
+
+body.dark-mode .fav-btn {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+}
+
+body.dark-mode .fav-btn.active, body.dark-mode .fav-toggle-btn.active {
+  background-color: rgba(217, 119, 6, 0.2);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
 }
 
 body.dark-mode .app-footer {
-  color: #aaa;
-  border-top-color: #333;
+  color: #64748b;
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
