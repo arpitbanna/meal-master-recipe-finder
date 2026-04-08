@@ -79,11 +79,3 @@ This project is configured natively using Vite and is ready for 1-click CI/CD de
 6. Click **Deploy**. Your app will be live globally in under a minute!
 
 ---
-
-## 👨‍💻 Author
-
-**Arpit singh pawar**
-- GitHub: [@your-github-username](https://github.com/your-github-username)
-- LinkedIn: [Arpit singh pawar](https://linkedin.com/in/your-linkedin-profile)
-
-*(Feel free to reach out with feedback or to connect professionally!)*
