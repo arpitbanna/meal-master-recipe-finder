@@ -1,17 +1,16 @@
 /* -----------------------------
    GLOBAL & BACKGROUNDS 
 ------------------------------ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
   margin: 0;
   padding: 20px;
-  background: linear-gradient(135deg, #f0f4f8 0%, #cbd5e1 100%);
-  background-attachment: fixed;
-  color: #1e293b;
-  transition: background 0.4s ease, color 0.4s ease;
+  background-color: #f8fafc; /* Soft food app background */
+  color: #0f172a;
+  transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
 }
 
@@ -19,7 +18,7 @@ body {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -29,26 +28,27 @@ body {
 
 /* Typography */
 h1 {
-  font-size: 3rem;
+  font-size: 3.2rem;
+  margin-top: 10px;
   margin-bottom: 40px;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #4f46e5 0%, #c026d3 100%);
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   display: inline-block;
-  drop-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 h2, h3 {
-  color: #334155;
-  margin: 0 0 12px 0;
+  color: #1e293b;
+  margin: 0;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 p {
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* -----------------------------
@@ -57,7 +57,7 @@ p {
 #mealContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -69,42 +69,40 @@ p {
 
 #mealContainer.single-item .meal-card {
   width: 100%;
-  max-width: 480px;
+  max-width: 420px;
 }
 
 /* -----------------------------
-   CONTROL PANEL (GLASSMORPHISM)
+   CONTROL PANEL
 ------------------------------ */
 .controls-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
 }
 
 .filters-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
   flex-wrap: wrap;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05),
-              0 0 10px rgba(255, 255, 255, 0.2) inset;
-  max-width: 900px;
+  padding: 20px 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+  max-width: 950px;
   margin: 0 auto;
 }
 
 input, select, button {
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   padding: 14px 20px;
   border-radius: 12px;
-  border: 1px solid rgba(203, 213, 225, 0.8);
+  border: 1px solid #cbd5e1;
   outline: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
@@ -112,34 +110,42 @@ input, select, button {
 
 input {
   width: 100%;
-  max-width: 320px;
-  background-color: rgba(255, 255, 255, 0.8);
+  max-width: 350px;
+  background-color: #f8fafc;
+  font-weight: 500;
 }
 
-input:focus, select:focus {
-  border-color: #8b5cf6;
+input:focus {
+  border-color: #f97316;
   background-color: #ffffff;
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
 }
 
 select {
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #f8fafc;
+  font-weight: 500;
+  color: #475569;
 }
 
-/* Native Control Buttons */
+select:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+/* Control Buttons */
 button {
   cursor: pointer;
   background-color: #ffffff;
   font-weight: 600;
   color: #334155;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 button:hover {
-  background-color: #f8fafc;
+  background-color: #f1f5f9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
 button:active {
@@ -151,82 +157,96 @@ button:active {
 }
 
 /* -----------------------------
-   MEAL CARDS (PREMIUM SAAS)
+   MEAL CARDS (FOOD APP STYLE)
 ------------------------------ */
 .meal-card {
-  padding: 24px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: #ffffff;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Important for edge-to-edge image mapping */
+  box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
               box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: fadeInUp 0.6s ease-out forwards;
+  animation: fadeInUp 0.5s ease-out forwards;
+  padding: 0; /* Resetting padding to map elements internally for layout control */
 }
 
 .meal-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.15);
-  border-color: rgba(255, 255, 255, 1);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.12);
 }
 
-/* Image Hover Zoom */
+/** Flexbox UX Rearrangement (Image Top, Info Bottom) **/
 .meal-card img {
+  order: 1; /* Forces Image to the Top */
   height: 220px;
   width: 100%;
   object-fit: cover;
-  border-radius: 14px;
-  margin-bottom: 20px;
-  transition: transform 0.4s ease;
+  margin: 0;
+  border-radius: 0; 
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.meal-card:hover img {
-  transform: scale(1.04);
+.meal-card h3 {
+  order: 2; /* Titles under Image */
+  padding: 20px 20px 4px 20px;
+  font-size: 1.3rem;
+  color: #0f172a;
+  text-align: left;
 }
 
 .meal-card p {
+  order: 3; /* Category under Title */
+  padding: 0 20px 16px 20px;
   color: #64748b;
   font-size: 0.95rem;
-  margin-bottom: 20px;
+  font-weight: 500;
+  text-align: left;
   flex-grow: 1;
+}
+
+.action-buttons {
+  order: 4; /* Buttons at bottom */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px 24px 20px;
+  margin-top: auto;
+}
+
+/* Image Hover Zoom inside bounded card */
+.meal-card:hover img {
+  transform: scale(1.06);
 }
 
 /* -----------------------------
    ACTION BUTTONS 
 ------------------------------ */
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: auto;
-}
-
 .view-btn {
   flex-grow: 1;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
   color: #ffffff;
   border: none;
   border-radius: 12px;
   font-weight: 700;
-  box-shadow: 0 6px 15px -3px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 15px -3px rgba(249, 115, 22, 0.4);
 }
 
 .view-btn:hover {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
   color: #ffffff;
-  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.6);
-  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.6);
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Favorite System Buttons */
 .fav-btn {
-  background-color: transparent;
+  background-color: #f1f5f9;
   color: #94a3b8;
-  border: 1px solid #cbd5e1;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,17 +255,16 @@ button:active {
 }
 
 .fav-btn.active {
-  color: #d97706;
-  border-color: #fbbf24;
-  background: #fef3c7;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  color: #ef4444;
+  background: #fee2e2;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
 .fav-toggle-btn.active {
-  background: #fef3c7;
-  color: #d97706;
-  border-color: #fbbf24;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #fca5a5;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
 /* -----------------------------
@@ -255,11 +274,10 @@ button:active {
   max-width: 800px;
   margin: 50px auto;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
+  background: #ffffff;
   border-radius: 24px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
   text-align: left;
   animation: fadeInUp 0.5s ease-out forwards;
 }
@@ -268,7 +286,7 @@ button:active {
   font-size: 2.2rem;
   margin-bottom: 25px;
   text-align: center;
-  color: #1e293b;
+  color: #0f172a;
 }
 
 .recipe-view img {
@@ -285,21 +303,47 @@ button:active {
   color: #475569;
   font-size: 1.1rem;
   line-height: 1.8;
+  white-space: pre-line; /* Helps with recipe instructions spacing */
 }
 
-.back-btn {
-  display: block;
-  margin: 40px auto 0;
-  min-width: 180px;
-  background: #ffffff;
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
+.recipe-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
 }
 
-.back-btn:hover {
+.recipe-actions .fav-btn {
+  flex: 1;
+  max-width: 250px;
+}
+
+.recipe-actions .back-btn {
+  margin: 0;
+  flex: 1;
+  max-width: 250px;
   background: #f1f5f9;
-  border-color: #94a3b8;
+  color: #334155;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-weight: 700;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.recipe-actions .back-btn:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px) scale(1.02);
+}
+
+.instructions-container {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 30px;
+}
+
+body.dark-mode .instructions-container {
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* -----------------------------
@@ -308,28 +352,30 @@ button:active {
 .top-bar {
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .dark-mode-toggle {
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   color: #475569;
   border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 .dark-mode-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #f8fafc;
 }
 
 .app-footer {
   margin-top: 80px;
   padding: 30px 10px 20px;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   color: #94a3b8;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   max-width: 1200px;
@@ -341,18 +387,20 @@ button:active {
    DARK MODE OVERRIDES
 ------------------------------ */
 body.dark-mode {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background-color: #0f172a;
   color: #f8fafc;
 }
 
-body.dark-mode h1 {
-  background: linear-gradient(135deg, #818cf8 0%, #e879f9 100%);
-  -webkit-background-clip: text;
-  color: transparent;
+body.dark-mode .top-bar, body.dark-mode .app-footer {
+  border-color: rgba(255,255,255,0.05);
 }
 
 body.dark-mode h2, body.dark-mode h3 {
-  color: #f1f5f9;
+  color: #f8fafc;
+}
+
+body.dark-mode .meal-card h3 {
+  color: #f8fafc;
 }
 
 body.dark-mode .meal-card p, body.dark-mode .recipe-view p {
@@ -360,32 +408,31 @@ body.dark-mode .meal-card p, body.dark-mode .recipe-view p {
 }
 
 body.dark-mode .filters-container {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4),
-              0 0 10px rgba(255, 255, 255, 0.05) inset;
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode input, body.dark-mode select, body.dark-mode button, body.dark-mode .back-btn {
-  background-color: rgba(30, 41, 59, 0.8);
+  background-color: #0f172a;
   color: #f1f5f9;
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: #334155;
 }
 
 body.dark-mode input:focus, body.dark-mode select:focus {
-  border-color: #8b5cf6;
-  background-color: rgba(15, 23, 42, 0.9);
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25);
+  border-color: #f97316;
+  background-color: #0f172a;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
 }
 
 body.dark-mode button:hover, body.dark-mode .back-btn:hover {
   background-color: #334155;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: #475569;
 }
 
 body.dark-mode .dark-mode-toggle {
-  background-color: rgba(30, 41, 59, 0.8);
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: #1e293b;
+  border-color: #334155;
   color: #cbd5e1;
 }
 
@@ -394,43 +441,44 @@ body.dark-mode .dark-mode-toggle:hover {
 }
 
 body.dark-mode .meal-card, body.dark-mode .recipe-view {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(12px);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .meal-card:hover {
-  box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.7);
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+  border-color: #475569;
 }
 
 body.dark-mode .view-btn {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
   border: none;
   color: #ffffff;
-  box-shadow: 0 6px 15px -3px rgba(79, 70, 229, 0.5);
+  box-shadow: 0 6px 15px -3px rgba(239, 68, 68, 0.3);
 }
 
 body.dark-mode .view-btn:hover {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.7);
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+
+
+  box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.5);
 }
 
 body.dark-mode .fav-btn {
-  background-color: transparent;
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #64748b;
 }
 
 body.dark-mode .fav-btn.active, body.dark-mode .fav-toggle-btn.active {
-  background-color: rgba(217, 119, 6, 0.2);
-  color: #fbbf24;
-  border-color: rgba(251, 191, 36, 0.4);
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
 }
 
 body.dark-mode .app-footer {
   color: #64748b;
-  border-top-color: rgba(255, 255, 255, 0.1);
+  border-top-color: #1e293b;
 }

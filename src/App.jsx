@@ -12,13 +12,21 @@ function App() {
   const [sortOrder, setSortOrder] = useState('default');
   const [favorites, setFavorites] = useState([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('mealMasterTheme');
+    if (savedTheme) {
+      return savedTheme === 'dark';
+    }
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
     fetchMeals('');
   }, []);
 
   useEffect(() => {
+    localStorage.setItem('mealMasterTheme', darkMode ? 'dark' : 'light');
     if (darkMode) {
       document.body.classList.add('dark-mode');
     } else {
@@ -173,8 +181,19 @@ function App() {
           <div className="recipe-view">
             <h2>{selectedMeal.strMeal}</h2>
             <img src={selectedMeal.strMealThumb} alt={selectedMeal.strMeal} />
-            <p>{selectedMeal.strInstructions}</p>
-            <button className="back-btn" onClick={goBack}>Back</button>
+            <div className="recipe-actions">
+              <button 
+                className={`fav-btn ${favorites.some(f => f.idMeal === selectedMeal.idMeal) ? 'active' : ''}`}
+                onClick={() => toggleFavorite(selectedMeal)}
+              >
+                {favorites.some(f => f.idMeal === selectedMeal.idMeal) ? '★ Favorited' : '☆ Favorite Recipe'}
+              </button>
+              <button className="view-btn back-btn" onClick={goBack}>Back to Meals</button>
+            </div>
+            <div className="instructions-container">
+              <h3>Preparation Instructions</h3>
+              <p>{selectedMeal.strInstructions}</p>
+            </div>
           </div>
         )}
       </div>
