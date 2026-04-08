@@ -20,16 +20,6 @@ Meal Master is a clean and fully responsive React web application that allows us
 
 ---
 
-## 📸 Screenshots
-*(Add high-quality screenshots of your app here to showcase your work to recruiters!)*
-
-*Example placeholders:*
-> `![Light Mode Homepage](./assets/light-mode.png)`  
-> `![Dark Mode UI Layout](./assets/dark-mode.png)`  
-> `![Favorites System Active](./assets/favorites.png)`  
-
----
-
 ## 🚀 Installation & Setup
 
 1. **Clone the repository:**
