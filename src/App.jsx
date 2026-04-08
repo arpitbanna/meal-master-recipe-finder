@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -8,14 +8,31 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const searchMeals = () => {
-    if (!query) return;
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [sortOrder, setSortOrder] = useState('default');
+  const [favorites, setFavorites] = useState([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    fetchMeals('');
+  }, []);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  const fetchMeals = (searchQuery) => {
     setLoading(true);
     setError(false);
     setSelectedMeal(null);
     setMeals([]);
 
-    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`)
+    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`)
       .then(response => response.json())
       .then(data => {
         setLoading(false);
@@ -25,10 +42,16 @@ function App() {
         }
         setMeals(data.meals);
       })
-      .catch(err => {
+      .catch(() => {
         setLoading(false);
-        console.error(err);
+        setError(true);
       });
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      fetchMeals(query);
+    }
   };
 
   const viewMeal = (id) => {
@@ -41,9 +64,9 @@ function App() {
           setSelectedMeal(data.meals[0]);
         }
       })
-      .catch(err => {
+      .catch(() => {
         setLoading(false);
-        console.error(err);
+        setError(true);
       });
   };
 
@@ -51,21 +74,76 @@ function App() {
     setSelectedMeal(null);
   };
 
+  const toggleFavorite = (meal) => {
+    if (favorites.some(f => f.idMeal === meal.idMeal)) {
+      setFavorites(favorites.filter(f => f.idMeal !== meal.idMeal));
+    } else {
+      setFavorites([...favorites, meal]);
+    }
+  };
+
+  const categories = Array.from(new Set(meals.map(meal => meal.strCategory))).filter(Boolean);
+
+  let displayedMeals = meals.filter(meal => {
+    const matchesSearch = meal.strMeal.toLowerCase().includes(query.toLowerCase());
+    const matchesCategory = selectedCategory === '' || meal.strCategory === selectedCategory;
+    const matchesFavorites = !showFavoritesOnly || favorites.some(f => f.idMeal === meal.idMeal);
+    return matchesSearch && matchesCategory && matchesFavorites;
+  });
+
+  if (sortOrder === 'asc') {
+    displayedMeals = [...displayedMeals].sort((a, b) => a.strMeal.localeCompare(b.strMeal));
+  } else if (sortOrder === 'desc') {
+    displayedMeals = [...displayedMeals].sort((a, b) => b.strMeal.localeCompare(a.strMeal));
+  }
+
   return (
     <>
+      <div className="top-bar">
+        <button className="dark-mode-toggle" onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
+      </div>
+
       <h1>Meal Master</h1>
       
       {!selectedMeal && (
-        <div className="search-container">
-          <input 
-            type="text" 
-            id="searchInput" 
-            placeholder="Search meals..." 
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && searchMeals()}
-          />
-          <button id="searchButton" onClick={searchMeals}>Search</button>
+        <div className="controls-section">
+          <div className="filters-container">
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Search meals..." 
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleSearchKeyPress}
+            />
+            <button id="searchButton" onClick={() => fetchMeals(query)}>Search</button>
+
+            {meals.length > 0 && (
+              <>
+                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                  <option value="">All Categories</option>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+
+                <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                  <option value="default">Sort by Default</option>
+                  <option value="asc">A-Z</option>
+                  <option value="desc">Z-A</option>
+                </select>
+
+                <button 
+                  className={`fav-toggle-btn ${showFavoritesOnly ? 'active' : ''}`}
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                >
+                  {showFavoritesOnly ? '★ Showing Favorites' : '☆ Show Favorites'}
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
 
@@ -73,13 +151,21 @@ function App() {
 
       {!loading && error && !selectedMeal && <p>No meals found</p>}
 
-      <div id="mealContainer">
-        {!loading && !selectedMeal && meals.length > 0 && meals.map(meal => (
-          <div key={meal.idMeal}>
+      <div id="mealContainer" className={displayedMeals.length === 1 ? 'single-item' : ''}>
+        {!loading && !selectedMeal && displayedMeals.length > 0 && displayedMeals.map(meal => (
+          <div key={meal.idMeal} className="meal-card">
             <h3>{meal.strMeal}</h3>
             <img src={meal.strMealThumb} alt={meal.strMeal} />
             <p>{meal.strCategory}</p>
-            <button className="view-btn" onClick={() => viewMeal(meal.idMeal)}>View Recipe</button>
+            <div className="action-buttons">
+              <button className="view-btn" onClick={() => viewMeal(meal.idMeal)}>View Recipe</button>
+              <button 
+                className={`fav-btn ${favorites.some(f => f.idMeal === meal.idMeal) ? 'active' : ''}`}
+                onClick={() => toggleFavorite(meal)}
+              >
+                {favorites.some(f => f.idMeal === meal.idMeal) ? '★ Favorited' : '☆ Favorite'}
+              </button>
+            </div>
           </div>
         ))}
 
@@ -92,6 +178,10 @@ function App() {
           </div>
         )}
       </div>
+
+      <footer className="app-footer">
+        <p>Arpit singh pawar</p>
+      </footer>
     </>
   );
 }
