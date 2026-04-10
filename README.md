@@ -1,69 +1,46 @@
-# 🍽️ Meal Master
+# MealMaster
 
-Meal Master is a clean and fully responsive React web application that allows users to instantly search, filter, and discover their next favorite recipes. Powered by Context API architecture principles and TheMealDB, it fetches real-time culinary data to display highly visual recipe cards dynamically.
+A recipe finder app built with React. Search for meals, save your favorites, and browse recipes — all powered by TheMealDB API.
 
----
+## What it does
 
-## ✨ Features
-- **Real-Time Search**: Search natively across hundreds of meals as you type.
-- **Dynamic Categories**: Select dropdown categories that are parsed out algorithmically without hardcoding.
-- **Smart Sorting**: Instantly order recipes alphabetically (A-Z or Z-A).
-- **Favorites System**: Star your favorite recipes locally and toggle views to display only your curated meals.
-- **Light & Dark Mode**: A custom minimal dark mode styling switch for comfortable night browsing.
-- **Adaptive Layout**: Gracefully snaps between robust CSS grids for multiple recipes and centered Flexbox staging for single-item results.
+You type a meal name, it fetches recipes from the API and shows them in a nice card layout. You can click on any card to see the full recipe with instructions. Pretty straightforward.
 
-## 🛠️ Tech Stack
-- **Frontend Framework**: React 19 (via Vite)
-- **Styling**: Pure CSS3 variables & Custom Responsive Rules
-- **Backend API**: [TheMealDB Free Public API](https://www.themealdb.com/api.php)
-- **Package Manager**: npm
+## Features
 
----
+- Search meals by name (debounced so it doesn't hit the API on every keystroke)
+- Filter results by category
+- Favorite/unfavorite meals — saved in localStorage so they persist on refresh
+- Dark mode toggle (also persisted)
+- Infinite scroll — loads more cards as you scroll down
+- Skeleton loading placeholders while data is being fetched
+- Friendly error and empty states
+- Fully responsive
 
-## 🚀 Installation & Setup
+## Tech Stack
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/meal-master.git
-   cd meal-master
-   ```
+- React 19
+- Vite
+- Vanilla CSS (no frameworks, just CSS variables + glassmorphism)
+- Fetch API
+- TheMealDB API (free, no key needed)
 
-2. **Install node modules:**
-   ```bash
-   npm install
-   ```
 
-3. **Start the local development server:**
-   ```bash
-   npm run dev
-   ```
+## Project Structure
 
-4. You can now access the running application by visiting the localhost URL indicated in your terminal (usually `http://localhost:5173`).
-
----
-
-## 📖 Usage Instructions
-- **Browsing**: Hit the Homepage to instantly load a smart default list of curated meals.
-- **Searching**: Use the top search bar. The grid will automatically update live as you type text constraints.
-- **Filters**: Stack search inputs with Category or Alphabetical sorts from the top Dropdowns.
-- **Saving**: Hit the "★ Favorite" button at the base of any recipe card to save it.
-- **Toggling Views**: Hit "☆ Show Favorites" beside the sorting inputs to filter the data exclusively to your pinned cards.
-
----
-
-## 📂 Folder Structure
-
-```text
-meal-master/
-├── public/                 # Favicons and static assets
-├── src/                    
-│   ├── App.css             # Component scope style rules and UI variables
-│   ├── App.jsx             # Core rendering, API logic, and Hooks 
-│   ├── index.css           # Global foundational resets
-│   └── main.jsx            # React root injection point
-├── package.json            # Configuration and project scripts
-├── vite.config.js          # Build configuration settings
-└── README.md               # Project documentation
+```
+src/
+├── components/     # Navbar, Card, Loader, Pagination
+├── hooks/          # useLocalStorage custom hook
+├── utils/          # API calls, debounce helper
+├── App.jsx         # Main app logic
+└── index.css       # All styles
 ```
 
----
+## Notes
+
+- No backend needed — everything runs client-side
+- Uses [TheMealDB](https://www.themealdb.com/api.php) free API
+- localStorage is used for favorites and theme preference
+
+Built as part of a frontend development project by Arpit Singh Pawar.

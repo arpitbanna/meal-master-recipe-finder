@@ -1,207 +1,226 @@
-import { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import Navbar from './components/Navbar';
+import Card from './components/Card';
+import Loader from './components/Loader';
+import { getMeals, getMealById } from './utils/api';
+import { debounce } from './utils/debounce';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import './index.css';
+
+const PER_PAGE = 12;
 
 function App() {
-  const [query, setQuery] = useState('');
   const [meals, setMeals] = useState([]);
-  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [category, setCategory] = useState('');
+  const [showFavOnly, setShowFavOnly] = useState(false);
+  const [visible, setVisible] = useState(PER_PAGE);
 
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [sortOrder, setSortOrder] = useState('default');
-  const [favorites, setFavorites] = useState([]);
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('mealMasterTheme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    }
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const [favorites, setFavorites] = useLocalStorage('mealMaster_favorites', []);
+  const [darkMode, setDarkMode] = useLocalStorage('mealMaster_theme', false);
 
+  const scrollRef = useRef(null);
+
+  // dark mode toggle
   useEffect(() => {
-    fetchMeals('');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('mealMasterTheme', darkMode ? 'dark' : 'light');
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
+    document.body.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  const fetchMeals = (searchQuery) => {
+  // fetch meals from API
+  async function loadMeals(q) {
     setLoading(true);
-    setError(false);
+    setError(null);
     setSelectedMeal(null);
-    setMeals([]);
-
-    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`)
-      .then(response => response.json())
-      .then(data => {
-        setLoading(false);
-        if (!data.meals) {
-          setError(true);
-          return;
-        }
-        setMeals(data.meals);
-      })
-      .catch(() => {
-        setLoading(false);
-        setError(true);
-      });
-  };
-
-  const handleSearchKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      fetchMeals(query);
+    setVisible(PER_PAGE);
+    try {
+      const data = await getMeals(q);
+      setMeals(data);
+      if (data.length === 0) setError('No meals found');
+    } catch {
+      setError('Something went wrong while fetching meals');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const viewMeal = (id) => {
-    setLoading(true);
-    fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setLoading(false);
-        if (data.meals) {
-          setSelectedMeal(data.meals[0]);
-        }
-      })
-      .catch(() => {
-        setLoading(false);
-        setError(true);
-      });
-  };
-
-  const goBack = () => {
-    setSelectedMeal(null);
-  };
-
-  const toggleFavorite = (meal) => {
-    if (favorites.some(f => f.idMeal === meal.idMeal)) {
-      setFavorites(favorites.filter(f => f.idMeal !== meal.idMeal));
-    } else {
-      setFavorites([...favorites, meal]);
-    }
-  };
-
-  const categories = Array.from(new Set(meals.map(meal => meal.strCategory))).filter(Boolean);
-
-  let displayedMeals = meals.filter(meal => {
-    const matchesSearch = meal.strMeal.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = selectedCategory === '' || meal.strCategory === selectedCategory;
-    const matchesFavorites = !showFavoritesOnly || favorites.some(f => f.idMeal === meal.idMeal);
-    return matchesSearch && matchesCategory && matchesFavorites;
-  });
-
-  if (sortOrder === 'asc') {
-    displayedMeals = [...displayedMeals].sort((a, b) => a.strMeal.localeCompare(b.strMeal));
-  } else if (sortOrder === 'desc') {
-    displayedMeals = [...displayedMeals].sort((a, b) => b.strMeal.localeCompare(a.strMeal));
   }
 
+  useEffect(() => { loadMeals(''); }, []);
+
+  // debounced version so we don't spam the API on every keystroke
+  const debouncedLoad = useCallback(debounce(val => loadMeals(val), 400), []);
+
+  function toggleFav(meal) {
+    setFavorites(prev => {
+      if (prev.some(f => f.idMeal === meal.idMeal)) {
+        return prev.filter(f => f.idMeal !== meal.idMeal);
+      }
+      return [...prev, meal];
+    });
+  }
+
+  async function openRecipe(id) {
+    setLoading(true);
+    setError(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      const meal = await getMealById(id);
+      setSelectedMeal(meal);
+    } catch {
+      setError('Could not load recipe details.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // get unique categories from current results
+  const categories = useMemo(() =>
+    [...new Set(meals.map(m => m.strCategory))].filter(Boolean),
+    [meals]
+  );
+
+  // filtering logic
+  const filtered = meals.filter(m => {
+    if (category && m.strCategory !== category) return false;
+    if (showFavOnly && !favorites.some(f => f.idMeal === m.idMeal)) return false;
+    return true;
+  });
+
+  const shown = filtered.slice(0, visible);
+
+  // infinite scroll with IntersectionObserver
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && visible < filtered.length) {
+        setVisible(v => v + 4);
+      }
+    }, { threshold: 0.1 });
+
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, [visible, filtered.length]);
+
   return (
-    <>
-      <div className="top-bar">
-        <button className="dark-mode-toggle" onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-        </button>
-      </div>
+    <div className="app">
+      <Navbar
+        darkMode={darkMode}
+        toggleTheme={() => setDarkMode(!darkMode)}
+        onSearch={setQuery}
+        debounceSearch={debouncedLoad}
+      />
 
-      <h1>Meal Master</h1>
-      
-      {!selectedMeal && (
-        <div className="controls-section">
-          <div className="filters-container">
-            <input 
-              type="text" 
-              id="searchInput" 
-              placeholder="Search meals..." 
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleSearchKeyPress}
-            />
-            <button id="searchButton" onClick={() => fetchMeals(query)}>Search</button>
+      <main className="main-content">
 
-            {meals.length > 0 && (
-              <>
-                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                  <option value="">All Categories</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-
-                <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-                  <option value="default">Sort by Default</option>
-                  <option value="asc">A-Z</option>
-                  <option value="desc">Z-A</option>
-                </select>
-
-                <button 
-                  className={`fav-toggle-btn ${showFavoritesOnly ? 'active' : ''}`}
-                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                >
-                  {showFavoritesOnly ? '★ Showing Favorites' : '☆ Show Favorites'}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {loading && <p id="loading">Loading...</p>}
-
-      {!loading && error && !selectedMeal && <p>No meals found</p>}
-
-      <div id="mealContainer" className={displayedMeals.length === 1 ? 'single-item' : ''}>
-        {!loading && !selectedMeal && displayedMeals.length > 0 && displayedMeals.map(meal => (
-          <div key={meal.idMeal} className="meal-card">
-            <h3>{meal.strMeal}</h3>
-            <img src={meal.strMealThumb} alt={meal.strMeal} />
-            <p>{meal.strCategory}</p>
-            <div className="action-buttons">
-              <button className="view-btn" onClick={() => viewMeal(meal.idMeal)}>View Recipe</button>
-              <button 
-                className={`fav-btn ${favorites.some(f => f.idMeal === meal.idMeal) ? 'active' : ''}`}
-                onClick={() => toggleFavorite(meal)}
+        {/* filters bar - only when browsing */}
+        {!selectedMeal && (
+          <div className="controls-panel fade-in">
+            <div className="filters">
+              <select value={category} onChange={e => { setCategory(e.target.value); setVisible(PER_PAGE); }}
+                className="custom-select">
+                <option value="">All Categories</option>
+                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="toggles">
+              <button
+                className={`btn toggle-btn ${showFavOnly ? 'active' : ''}`}
+                onClick={() => { setShowFavOnly(!showFavOnly); setVisible(PER_PAGE); }}
               >
-                {favorites.some(f => f.idMeal === meal.idMeal) ? '★ Favorited' : '☆ Favorite'}
+                {showFavOnly ? '★ Showing Favorites' : '☆ View Favorites'}
               </button>
             </div>
           </div>
-        ))}
+        )}
 
-        {!loading && selectedMeal && (
-          <div className="recipe-view">
-            <h2>{selectedMeal.strMeal}</h2>
-            <img src={selectedMeal.strMealThumb} alt={selectedMeal.strMeal} />
-            <div className="recipe-actions">
-              <button 
-                className={`fav-btn ${favorites.some(f => f.idMeal === selectedMeal.idMeal) ? 'active' : ''}`}
-                onClick={() => toggleFavorite(selectedMeal)}
-              >
-                {favorites.some(f => f.idMeal === selectedMeal.idMeal) ? '★ Favorited' : '☆ Favorite Recipe'}
-              </button>
-              <button className="view-btn back-btn" onClick={goBack}>Back to Meals</button>
+        {loading && !selectedMeal && <Loader type="skeleton" />}
+
+        {/* error state */}
+        {error && !loading && (
+          <div className="state-container fade-in">
+            <svg className="state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <h2 className="state-title">Oops! Nothing found</h2>
+            <p className="state-desc">
+              {error === 'No meals found'
+                ? "We couldn't find any recipes matching your criteria. Try a different search."
+                : error}
+            </p>
+            <button className="btn retry-btn" onClick={() => { setQuery(''); loadMeals(''); }}>
+              Reset Search
+            </button>
+          </div>
+        )}
+
+        {/* empty favorites */}
+        {!loading && !error && !selectedMeal && filtered.length === 0 && (
+          <div className="state-container fade-in">
+            <svg className="state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+            <h2 className="state-title">Your list is empty</h2>
+            <p className="state-desc">You haven't added any favorites yet. Go explore and heart some tasty meals!</p>
+          </div>
+        )}
+
+        {/* meal cards grid */}
+        {!loading && !error && !selectedMeal && shown.length > 0 && (
+          <div className="grid-container">
+            {shown.map((meal, i) => (
+              <div key={meal.idMeal} className="card-appear" style={{ animationDelay: `${i * 0.05}s` }}>
+                <Card
+                  meal={meal}
+                  onCook={openRecipe}
+                  isFavorite={favorites.some(f => f.idMeal === meal.idMeal)}
+                  toggleFavorite={toggleFav}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* infinite scroll sentinel */}
+        {!selectedMeal && filtered.length > visible && (
+          <div ref={scrollRef} style={{ height: 80 }}>
+            <Loader type="spinner" />
+          </div>
+        )}
+
+        {/* recipe detail view */}
+        {selectedMeal && (
+          <div className="recipe-details fade-in">
+            <button className="btn back-btn" onClick={() => setSelectedMeal(null)}>
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Explore
+            </button>
+            <div className="recipe-header">
+              <img src={selectedMeal.strMealThumb} alt={selectedMeal.strMeal} />
+              <div className="recipe-info">
+                <h2>{selectedMeal.strMeal}</h2>
+                <div className="tags">
+                  <span className="tag">{selectedMeal.strCategory}</span>
+                  <span className="tag">{selectedMeal.strArea}</span>
+                </div>
+              </div>
             </div>
-            <div className="instructions-container">
+            <div className="recipe-instructions">
               <h3>Preparation Instructions</h3>
               <p>{selectedMeal.strInstructions}</p>
             </div>
           </div>
         )}
-      </div>
+      </main>
 
-      <footer className="app-footer">
-        <p>Arpit singh pawar</p>
+      <footer className="footer">
+        <p>&copy; {new Date().getFullYear()} MealMaster Pro. Designed for excellence.</p>
       </footer>
-    </>
+    </div>
   );
 }
 
